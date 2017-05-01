@@ -1,0 +1,52 @@
+.loader {
+	position: absolute;
+	height: 300px;
+
+	.pacman:before, .pacman:after{
+	content: '';
+	position: absolute;
+	background: $amber;
+	width: $pacmanWidth;
+	height: $pacmanHeight;
+	left: 50px;
+	top: 40%;
+	margin-top: - $pacmanHeight;
+	border-radius: $pacmanHeight $pacmanHeight 0 0;
+	@include use-animation(up, $time);
+	}
+
+	.pacman:after {
+	margin-top: -1px;
+	border-radius: 0 0 $pacmanHeight $pacmanHeight;
+	@include use-animation(down, $time);
+	} 
+
+	.dot{
+	position: absolute;
+	left: 160px;
+	top: 40%;
+	width: $pacmanHeight/5;
+	height: $pacmanHeight/5;
+	margin-top: - $pacmanHeight/10;
+	margin-left: 30px;
+	border-radius: 50%;
+	background: $grey;
+	z-index: -1;
+	box-shadow: 30px 0 0 $grey,
+	            60px 0 0 $grey,
+	            90px 0 0 $grey,
+	            120px 0 0 $grey,
+	            150px 0 0 $grey;
+	@include use-animation(r-to-l, $time);
+	}
+}
+
+.has-loader {
+	position: relative;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}

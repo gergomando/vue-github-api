@@ -1,0 +1,24 @@
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "_mixins";
+@import "_variables";
+@import "_animations";
+@import "/components/loader";
+
+[v-cloak] { display:none; }
+
+.navbar + .container-fluid {
+	padding-top: 40px
+} 
+
+ul {
+	padding-left: 0px;
+	li {
+		list-style-type: none;
+	}
+}
+
+.sidebar {
+	padding-top: 20px;
+	.nav-sidebar {
+	}
+}

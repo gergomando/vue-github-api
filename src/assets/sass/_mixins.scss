@@ -1,0 +1,13 @@
+@mixin animation($name) {
+  @-webkit-keyframes #{$name} {@content;}
+  @-moz-keyframes #{$name} {@content;}
+  @-o-keyframes #{$name} {@content;}
+  @keyframes #{$name} {@content;}
+}
+
+@mixin use-animation($name, $time){
+  -webkit-animation: $name $time infinite;
+  -moz-animation: $name $time infinite;
+  -o-animation: $name $time infinite;
+  animation: $name $time infinite;
+}

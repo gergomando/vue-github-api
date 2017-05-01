@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<title>frontend-test</title>
+
+<link rel="stylesheet" href="/dist/app.css">
+</head>
+
+<body>
+<div id="app">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <router-link class="navbar-brand" :to="{ name: 'home'}">
+          {{ app.name }}
+        </router-link>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <router-link :to="{ name: 'home'}">
+              home
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid" >
+    <div class="row">
+      
+      <div class="col-sm-3 sidebar">
+        <h2>Users</h2>
+        <ul class="nav nav-sidebar">
+           <li class="active" v-cloak>
+            <router-link  to="/">{{ user.name }}</router-link>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-9 main">
+       <router-view :user="user" :api="api"></router-view>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="/dist/app.js"></script>
+
+</body>
+</html>
