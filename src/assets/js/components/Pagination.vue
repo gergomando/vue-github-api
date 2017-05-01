@@ -6,14 +6,14 @@
         Previous
       </router-link>
     </li>
-<!--
-    <li v-for="n in 4">
-      <router-link class="btn btn-info" :to="{ name: 'repoList',params: { page:  currentPage + n }}">
-       {{ currentPage + n }}
+
+    <li v-for="n in 4" >
+      <router-link v-if="(currentPage-1) + n < lastPage" class="btn btn-info" :to="{ name: 'repoList',params: { page:  (currentPage-1) + n }}">
+       {{ (currentPage-1) + n  }}
       </router-link>
     </li>
--->
-    <li v-if="itemNrOnPage == itemPerPage">
+
+    <li v-if="currentPage < lastPage">
       <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: nextPage }}">
         Next 
       </router-link>
@@ -25,19 +25,14 @@
 <script>
 export default {
   props: {
+    lastPage : {
+      type: Number,
+      default : 1
+    },
     currentPage: {
       type : Number,
       default: 1
-    },
-    itemPerPage: {
-      type : Number,
-      default: 10
-    },
-    itemNrOnPage: {
-      type : Number,
-      default: 10
     }
-
   },
   computed: {
     nextPage: function() {

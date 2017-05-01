@@ -7,6 +7,9 @@ var plugins = require('webpack-mix').plugins;
 Mix.initialize();
 
 module.exports = {
+  context : Mix.Paths.root(),
+  entry : Mix.entry(),
+  output : Mix.output(),
   module: {
     rules: [
       {
@@ -28,16 +31,20 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: './dist/fonts/[name].[ext]?[hash]',
+          publicPath: '.'
         }
       },
       {
-        test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/,
-        loader: 'file-loader'
-      }
+        test: /\.(png|jpg|gif)$/,
+        loader: 'file-loader',
+        options: {
+          name: './dist/img/[name].[ext]?[hash]',
+        }
+      },
     ]
   },
   resolve: {
@@ -55,10 +62,6 @@ module.exports = {
 
   devtool: Mix.sourcemaps
 }
-
-module.exports.context = Mix.Paths.root();
-module.exports.entry = Mix.entry();
-module.exports.output = Mix.output();
 
 if (Mix.cssPreprocessor) {
     Mix[Mix.cssPreprocessor].forEach(toCompile => {

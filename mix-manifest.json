@@ -1,4 +1,6 @@
 {
-  "dist/build.js": "dist/build.js",
-  "dist/build.css": "dist/build.css"
+  "dist/js/app.js": "dist/js/app.js",
+  "dist/css/app.css": "dist/css/app.css",
+  "dist/js/app.js.map": "dist/js/app.js.map",
+  "dist/css/app.css.map": "dist/css/app.css.map"
 }

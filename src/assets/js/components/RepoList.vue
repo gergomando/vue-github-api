@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12 has-loader">
       <h2 class="page-header">
-        Repositories by {{ user.name }}
+        Repositories by {{ user.name }} {{paginationParams.next}}
       </h2>
       
       <loader v-if="loading"></loader>
@@ -17,10 +17,7 @@
               </router-link>
             </li>
           </ul>
-          <pagination 
-            :currentPage="currentPage" 
-            :itemPerPage="itemPerPage" 
-            :itemNrOnPage="user.repositories.length">
+          <pagination :currentPage="currentPage" :lastPage="paginationParams.last">
           </pagination>
         </div>
       </transition>
@@ -51,7 +48,8 @@ export default {
   data :function () {
     return {
       loading : true,
-      itemPerPage: 10
+      itemPerPage: 10,
+      link: ''
     }
   },
   computed: {
@@ -65,6 +63,16 @@ export default {
       return this.api + '/users/' + this.user.name + 
         '/repos?per_page='+ this.itemPerPage + '&page=' + this.currentPage
     },
+    paginationParams : function() {
+      return this.link.split(', ').reduce(function (result, part) {
+        var match = part.match('<(.*?)>; rel="(.*?)"');
+
+        if (match && match.length === 3) {
+          result[match[2]] = parseInt(match[1].split('&page=')[1]);
+        }
+        return result;
+      }, {});
+    }
   },
   watch: {
     $route: function (route) {
@@ -74,15 +82,19 @@ export default {
   methods : {
     getRepositories: function () {
       let self = this
+
       fetch(this.apiUrl)
-        .then((resp) => resp.json() )
+        .then(res =>  {
+          self.link = res.headers.get('Link')
+          return res.json()
+        })
         .then(function(data) {
-          self.user.repositories = data
-          self.loading = false
+         self.user.repositories = data
+         self.loading = false
         })
         .catch(function(error) {
-          this.errors.push(error)
-      })
+          console.log(error)
+        })
     }
   },
   mounted() {
