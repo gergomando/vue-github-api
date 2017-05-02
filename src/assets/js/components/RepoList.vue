@@ -38,9 +38,6 @@
 <script>
 import Pagination from './Pagination.vue'
 import Loader from './Loader.vue'
-import {Api} from '../classes/Api.js'
-
-let api = new Api()
 
 export default {
   components: {
@@ -50,15 +47,15 @@ export default {
   props: {
     user: {
       type: Object,
-      default: function(){ 
+      default: function() { 
         return { name : 'addyosmani' , repositories : [] } 
       }
     }, 
+    api : new Object()
   },
   data :function () {
     return {
       loading : true,
-      itemPerPage: 6,
       headerLink: {
         type: String
       },
@@ -72,14 +69,16 @@ export default {
       return this.hasPage ? parseInt(this.$route.params.page) : 1
     },
     resourceUrl: function () {
-      return api.basePath() + '/users/' + this.user.name + 
-        '/repos?per_page='+ this.itemPerPage + '&page=' + this.currentPage
+      this.api.user = this.user
+      this.api.pagination = { limit : 6, current : this.currentPage }
+     
+      return this.api.makeUrl('userRepositories')
     },
     paginationLinks : function() {
       if(typeof this.headerLink !== 'string')
         return false
 
-      let links = api.parseUrl(this.headerLink)
+      let links = this.api.parseHeader(this.headerLink)
       links.current = this.currentPage
       links.last = (links.last || links.current)
       return links
@@ -93,7 +92,7 @@ export default {
   methods : {
     getResource: function () {
       let self = this
-      
+
       fetch(self.resourceUrl)
         .then(res =>  {
           self.headerLink = res.headers.get('Link')

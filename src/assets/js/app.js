@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import RepoList from './components/RepoList.vue'
 import RepoSingle from './components/RepoSingle.vue'
+import {Api} from './classes/Api.js'
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
@@ -24,6 +25,7 @@ const app = new Vue({
   data: {
   	app : {name : 'Test Project'},
     user: { name : 'addyosmani' , repositories : [] },
+    api : new Api({'basePath':'https://api.github.com'})
   }
 });
 

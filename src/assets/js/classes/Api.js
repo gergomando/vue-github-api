@@ -1,30 +1,38 @@
 export class Api {
-	basePath(){
-		return 'https://api.github.com'
-	} 
+ 	constructor(params) {
+		this.basePath = params.basePath
+  	this.user = params.user
+  	this.paginationQuery = new String
+  	this.urlParams = {}
+  }
 
-	fetchUrl(url) {
-    fetch(url)
-      .then(res =>  {
-        return res.json()
-      })
-      .then(function(data) {
-      	let lenke = data
-       return lenke
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
+	set pagination(newValue) {
+		if(!newValue)
+			this.paginationQuery = ''
+
+		if(typeof newValue === 'object')
+			this.paginationQuery = '?per_page='+ newValue.limit + '&page=' + newValue.current
 	}
 
-	parseUrl(url) {
+	makeUrl(type) {
+		return this.basePath + this.routeMap()[type] + this.paginationQuery
+	}
+
+	routeMap() {
+		return {
+			userRepositories : '/users/' + this.user.name + '/repos',
+			userRepo :  '/repos/' + this.user.name + '/' + this.urlParams.repoName
+		}
+	}
+
+	parseHeader(url) {
     if(typeof url !== 'string')
     	return
 
 		let parsedObject = {};
 
     parsedObject = url.split(', ').reduce(function (result, part) {
-      var match = part.match('<(.*?)>; rel="(.*?)"')
+      let match = part.match('<(.*?)>; rel="(.*?)"')
 
       if (match && match.length === 3) {
         result[match[2]] = parseInt(match[1].split('&page=')[1])
@@ -36,4 +44,23 @@ export class Api {
 
     return parsedObject
   }
+
+  set resource(newValue) {
+  	console.log(1)
+  }
+
+	fetchUrl(url) {
+		let self = this
+    fetch(url)
+      .then(res =>  {
+        return res.json()
+      })
+      .then(function(data) {
+      	self.resource = data
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+	}
+
 }
