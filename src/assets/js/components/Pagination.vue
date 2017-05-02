@@ -14,7 +14,7 @@
     </li>
 
     <li>
-      <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: links.last }}">
+      <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: links.next }}">
         Next
       </router-link>
     </li>

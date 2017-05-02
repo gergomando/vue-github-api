@@ -37,8 +37,10 @@
 import Pagination from './Pagination.vue'
 import Loader from './Loader.vue'
 import {ParseLink} from '../classes/ParseHeaderLink.js'
+import {ApiRoute} from '../classes/ApiRoute.js'
 
 let LinkParser = new ParseLink()
+let Api = new ApiRoute()
 
 export default {
   components: {
@@ -76,6 +78,7 @@ export default {
     },
     paginationLinks : function() {
       let links = LinkParser.parse(this.link)
+      console.log(Api.parse())
       links.current = this.currentPage
       links.last = links.last ? links.last : links.current
       return links
