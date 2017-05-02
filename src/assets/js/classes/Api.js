@@ -1,11 +1,4 @@
 export class Api {
-  constructor(name) {
-    this.name = name;
-  }
-  name() {
-  	return 12
-  }
-
 	basePath(){
 		return 'https://api.github.com'
 	} 
