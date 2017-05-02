@@ -7,8 +7,12 @@
 [v-cloak] { display:none; }
 
 .navbar + .container-fluid {
-	padding-top: 40px
+	padding-top: 60px
 } 
+
+a {
+	color: black
+}
 
 ul {
 	padding-left: 0px;
@@ -17,8 +21,21 @@ ul {
 	}
 }
 
+.page-header {
+	margin: 30px 0 20px;
+	border-bottom: 4px solid #eeeeee;
+	color: #23527c;
+	font-size: 24px;
+}
+
 .sidebar {
-	padding-top: 20px;
 	.nav-sidebar {
+		li {
+			> a {
+				color: #23527c;
+				font-weight: bold;
+				font-size: 16px;
+			}
+		}
 	}
 }

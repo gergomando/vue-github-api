@@ -2,20 +2,20 @@
 <div id="app">
   <ul class="pagination">
     <li>
-      <router-link class="btn btn-info" :to="{ name: 'repoList',params: { page: prevPage }}">
+      <router-link class="btn btn-info" :to="{ name: 'repoList',params: { page: links.prev }}">
         Previous
       </router-link>
     </li>
 
-    <li v-for="n in 4" >
-      <router-link v-if="(currentPage-1) + n < lastPage" class="btn btn-info" :to="{ name: 'repoList',params: { page:  (currentPage-1) + n }}">
-       {{ (currentPage-1) + n  }}
+    <li v-for="link in offsetLinks" >
+      <router-link class="btn btn-info" :to="{ name: 'repoList',params: { page:link}}">
+       {{ link }}
       </router-link>
     </li>
 
-    <li v-if="currentPage < lastPage">
-      <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: nextPage }}">
-        Next 
+    <li v-if="links.current < links.last">
+      <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: links.next }}">
+        Next
       </router-link>
     </li>
   </ul>
@@ -25,21 +25,37 @@
 <script>
 export default {
   props: {
-    lastPage : {
-      type: Number,
-      default : 1
+    links : {
+      type: Object,
+      default : {
+        last  : 1,
+        first : 1,
+        prev  : 1,
+        next  : 1,
+        current:1,
+      },
     },
-    currentPage: {
-      type : Number,
-      default: 1
+  },
+  data : function() {
+    return {
+      offset : 4
     }
   },
   computed: {
-    nextPage: function() {
-      return this.currentPage+1
-    },
-    prevPage: function() {
-      return this.currentPage > 1 ? this.currentPage-1 : 1
+    offsetLinks: function() {
+      let links = new Array
+
+      for(let n = 0; n < this.offset; n++) {
+        let link = new Number()
+        
+        if(this.links.current + this.offset > this.links.last)
+          link = ((this.links.last - this.offset) + n) + 1
+        else
+         link = this.links.current + n
+        
+        links.push(link)        
+      }
+      return links
     }
   }
 }

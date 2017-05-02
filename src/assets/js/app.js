@@ -10,13 +10,13 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 
 const routes = [
-    { path: '/', name: 'home', component: RepoList },
+    { path: '/', name: 'home', component: RepoList,},
     { path: '/repos/page/:page', name: 'repoList', component: RepoList },
     { path: '/repo/:repoName', name: 'repoSingle', component: RepoSingle }
 ]
 
 const router = new VueRouter({
-    routes // short for routes: routes
+    routes // short for routes: routes,
 })
 
 const app = new Vue({
@@ -26,4 +26,7 @@ const app = new Vue({
     api : 'https://api.github.com',
     user: { name : 'addyosmani' , repositories : [] },
   }
-}).$mount('#app')
+});
+
+
+app.$mount('#app');

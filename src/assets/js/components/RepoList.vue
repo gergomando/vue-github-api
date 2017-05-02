@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12 has-loader">
       <h2 class="page-header">
-        Repositories by {{ user.name }} {{paginationParams.next}}
+        Repositories by {{ user.name }}
       </h2>
       
       <loader v-if="loading"></loader>
@@ -17,8 +17,8 @@
               </router-link>
             </li>
           </ul>
-          <pagination :currentPage="currentPage" :lastPage="paginationParams.last">
-          </pagination>
+
+          <pagination :links="paginationLinks"></pagination>
         </div>
       </transition>
 
@@ -63,15 +63,8 @@ export default {
       return this.api + '/users/' + this.user.name + 
         '/repos?per_page='+ this.itemPerPage + '&page=' + this.currentPage
     },
-    paginationParams : function() {
-      return this.link.split(', ').reduce(function (result, part) {
-        var match = part.match('<(.*?)>; rel="(.*?)"');
-
-        if (match && match.length === 3) {
-          result[match[2]] = parseInt(match[1].split('&page=')[1]);
-        }
-        return result;
-      }, {});
+    paginationLinks : function() {
+      return this.parseApiLink(this.link)
     }
   },
   watch: {
@@ -80,6 +73,24 @@ export default {
     }
   },
   methods : {
+    parseApiLink : function(link) {
+      let parsedObject = {};
+      
+      parsedObject = link.split(', ').reduce(function (result, part) {
+        var match = part.match('<(.*?)>; rel="(.*?)"')
+
+        if (match && match.length === 3) {
+          result[match[2]] = parseInt(match[1].split('&page=')[1])
+        }
+        return result
+      }, {})
+
+      parsedObject.prev = parsedObject.prev ? parsedObject.prev : 1
+      parsedObject.current = parsedObject.prev + 1
+      parsedObject.last = parsedObject.last ? parsedObject.last : parsedObject.current
+      
+      return parsedObject
+    },
     getRepositories: function () {
       let self = this
 
