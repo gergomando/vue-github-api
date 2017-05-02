@@ -13,8 +13,8 @@
       </router-link>
     </li>
 
-    <li v-if="links.current < links.last">
-      <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: links.next }}">
+    <li>
+      <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: links.last }}">
         Next
       </router-link>
     </li>
@@ -52,7 +52,6 @@ export default {
           link = ((this.links.last - this.offset) + n) + 1
         else
          link = this.links.current + n
-        
         links.push(link)        
       }
       return links

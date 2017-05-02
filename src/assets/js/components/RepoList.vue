@@ -10,14 +10,20 @@
       
       <transition name="fade">
         <div class="list-body" v-if="!loading">
-          <ul>
-            <li v-for="(item,key) in user.repositories">
-              <router-link :to="{ name: 'repoSingle', params: { repoName: item.name }}" >
-                {{ item.name }} 
-              </router-link>
-            </li>
-          </ul>
-
+          <div class="row">
+            <div class="col-sm-6" v-for="(item,key) in user.repositories">
+              <div class="list-body-item">
+                <div class="link">
+                  <router-link :to="{ name: 'repoSingle', params: { repoName: item.name }}" >
+                     {{ trimString( item.name ) }} 
+                  </router-link>
+                </div>
+                <div class="description">
+                  <p> {{ trimString( item.description ) }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
           <pagination :links="paginationLinks"></pagination>
         </div>
       </transition>
@@ -30,6 +36,9 @@
 <script>
 import Pagination from './Pagination.vue'
 import Loader from './Loader.vue'
+import {ParseLink} from '../classes/ParseHeaderLink.js'
+
+let LinkParser = new ParseLink()
 
 export default {
   components: {
@@ -48,8 +57,10 @@ export default {
   data :function () {
     return {
       loading : true,
-      itemPerPage: 10,
-      link: ''
+      itemPerPage: 6,
+      link: {
+        type: String
+      },
     }
   },
   computed: {
@@ -64,8 +75,11 @@ export default {
         '/repos?per_page='+ this.itemPerPage + '&page=' + this.currentPage
     },
     paginationLinks : function() {
-      return this.parseApiLink(this.link)
-    }
+      let links = LinkParser.parse(this.link)
+      links.current = this.currentPage
+      links.last = links.last ? links.last : links.current
+      return links
+    },
   },
   watch: {
     $route: function (route) {
@@ -73,24 +87,6 @@ export default {
     }
   },
   methods : {
-    parseApiLink : function(link) {
-      let parsedObject = {};
-      
-      parsedObject = link.split(', ').reduce(function (result, part) {
-        var match = part.match('<(.*?)>; rel="(.*?)"')
-
-        if (match && match.length === 3) {
-          result[match[2]] = parseInt(match[1].split('&page=')[1])
-        }
-        return result
-      }, {})
-
-      parsedObject.prev = parsedObject.prev ? parsedObject.prev : 1
-      parsedObject.current = parsedObject.prev + 1
-      parsedObject.last = parsedObject.last ? parsedObject.last : parsedObject.current
-      
-      return parsedObject
-    },
     getRepositories: function () {
       let self = this
 
@@ -106,6 +102,18 @@ export default {
         .catch(function(error) {
           console.log(error)
         })
+    },
+    trimString : function(string,limit) {
+      if(typeof string !== 'string')
+        return 
+
+      limit = limit ? limit : 100
+      
+      if(string.length < limit)
+        return string
+      else
+        return string.substr(0,limit).concat("...")
+
     }
   },
   mounted() {
