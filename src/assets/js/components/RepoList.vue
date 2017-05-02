@@ -24,7 +24,9 @@
               </div>
             </div>
           </div>
-          <pagination :links="paginationLinks"></pagination>
+          <div v-if="paginationLinks.last > 1">
+            <pagination :links="paginationLinks"></pagination>
+          </div>
         </div>
       </transition>
 
@@ -36,11 +38,9 @@
 <script>
 import Pagination from './Pagination.vue'
 import Loader from './Loader.vue'
-import {ParseLink} from '../classes/ParseHeaderLink.js'
-import {ApiRoute} from '../classes/ApiRoute.js'
+import {Api} from '../classes/Api.js'
 
-let LinkParser = new ParseLink()
-let Api = new ApiRoute()
+let api = new Api()
 
 export default {
   components: {
@@ -50,17 +50,16 @@ export default {
   props: {
     user: {
       type: Object,
-      default: { name : 'addyosmani' , repositories : [] }
+      default: function(){ 
+        return { name : 'addyosmani' , repositories : [] } 
+      }
     }, 
-    api : {
-      type : String
-    }
   },
   data :function () {
     return {
       loading : true,
       itemPerPage: 6,
-      link: {
+      headerLink: {
         type: String
       },
     }
@@ -72,30 +71,32 @@ export default {
     currentPage : function() {
       return this.hasPage ? parseInt(this.$route.params.page) : 1
     },
-    apiUrl: function () {
-      return this.api + '/users/' + this.user.name + 
+    resourceUrl: function () {
+      return api.basePath() + '/users/' + this.user.name + 
         '/repos?per_page='+ this.itemPerPage + '&page=' + this.currentPage
     },
     paginationLinks : function() {
-      let links = LinkParser.parse(this.link)
-      console.log(Api.parse())
+      if(typeof this.headerLink !== 'string')
+        return false
+
+      let links = api.parseUrl(this.headerLink)
       links.current = this.currentPage
-      links.last = links.last ? links.last : links.current
+      links.last = (links.last || links.current)
       return links
     },
   },
   watch: {
     $route: function (route) {
-      return this.getRepositories()
+      return this.getResource()
     }
   },
   methods : {
-    getRepositories: function () {
+    getResource: function () {
       let self = this
-
-      fetch(this.apiUrl)
+      
+      fetch(self.resourceUrl)
         .then(res =>  {
-          self.link = res.headers.get('Link')
+          self.headerLink = res.headers.get('Link')
           return res.json()
         })
         .then(function(data) {
@@ -110,7 +111,7 @@ export default {
       if(typeof string !== 'string')
         return 
 
-      limit = limit ? limit : 100
+      limit = (limit || 100)
       
       if(string.length < limit)
         return string
@@ -120,7 +121,7 @@ export default {
     }
   },
   mounted() {
-    this.getRepositories()
+    this.getResource()
   }
 }
 </script>

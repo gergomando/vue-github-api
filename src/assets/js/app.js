@@ -23,7 +23,6 @@ const app = new Vue({
   router,
   data: {
   	app : {name : 'Test Project'},
-    api : 'https://api.github.com',
     user: { name : 'addyosmani' , repositories : [] },
   }
 });

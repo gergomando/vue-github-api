@@ -1,6 +1,6 @@
 <template lang="html">
 <div id="app">
-  <ul class="pagination">
+  <ul class="pagination" >
     <li>
       <router-link class="btn btn-info" :to="{ name: 'repoList',params: { page: links.prev }}">
         Previous
@@ -13,7 +13,7 @@
       </router-link>
     </li>
 
-    <li>
+    <li v-show="links.current < links.last">
       <router-link class="btn btn-info" :to="{ name: 'repoList', params: { page: links.next }}">
         Next
       </router-link>
@@ -27,12 +27,14 @@ export default {
   props: {
     links : {
       type: Object,
-      default : {
-        last  : 1,
-        first : 1,
-        prev  : 1,
-        next  : 1,
-        current:1,
+      default : function(){
+        return {
+          last  : 1,
+          first : 1,
+          prev  : 1,
+          next  : 1,
+          current:1
+        }
       },
     },
   },
