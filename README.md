@@ -1,9 +1,10 @@
-# frontend-test
+Small example of using these tools:
+# vue-router, vue-resource, webpack
 
-> A Vue.js project
+# Live example : 
+http://node.templatefor.me
 
 ## Build Setup
-
 ``` bash
 # install dependencies
 npm install
