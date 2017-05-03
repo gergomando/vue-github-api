@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     offsetLinks: function() {
-      let links = new Array
+      let links = new Array()
 
       for(let n = 0; n < this.offset; n++) {
         let link = new Number()
@@ -54,6 +54,7 @@ export default {
           link = ((this.links.last - this.offset) + n) + 1
         else
          link = this.links.current + n
+       
         links.push(link)        
       }
       return links

@@ -24,7 +24,7 @@ const app = new Vue({
   router,
   data: {
   	app : {name : 'Test Project'},
-    users: { name : 'addyosmani' , repositories : [] },
+    user: { name : 'addyosmani' , repositories : [] },
     api : new Api({'basePath':'https://api.github.com'})
   }
 });

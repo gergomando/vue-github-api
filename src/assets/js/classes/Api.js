@@ -2,9 +2,16 @@ export class Api {
  	constructor(params) {
 		this.basePath = params.basePath
   	this.user = params.user
-  	this.paginationQuery = new String
+  	this.paginationQuery = new String()
   	this.urlParams = {}
   }
+
+	routeMap() {
+		return {
+			userRepositories : '/users/' + this.user.name + '/repos',
+			userRepo :  '/repos/' + this.user.name + '/' + this.urlParams.repoName
+		}
+	}
 
 	set pagination(newValue) {
 		if(!newValue)
@@ -16,13 +23,6 @@ export class Api {
 
 	makeUrl(type) {
 		return this.basePath + this.routeMap()[type] + this.paginationQuery
-	}
-
-	routeMap() {
-		return {
-			userRepositories : '/users/' + this.user.name + '/repos',
-			userRepo :  '/repos/' + this.user.name + '/' + this.urlParams.repoName
-		}
 	}
 
 	parseHeader(url) {
@@ -43,10 +43,6 @@ export class Api {
     parsedObject.prev = (parsedObject.prev || 1)
 
     return parsedObject
-  }
-
-  set resource(newValue) {
-  	console.log(1)
   }
 
 	fetchUrl(url) {
