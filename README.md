@@ -1,7 +1,7 @@
 Small example of using these tools:
-# vue-router, vue-resource, webpack
+## vue, ES6, Github Api, webpack
 
-# Live example : 
+## Live example : 
 http://node.templatefor.me
 
 ## Build Setup
